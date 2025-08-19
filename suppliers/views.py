@@ -1,9 +1,10 @@
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from . import models, forms
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-class SupplierListView(ListView):
+class SupplierListView(LoginRequiredMixin, ListView):
     model = models.Supplier
     template_name = 'supplier_list.html'
     context_object_name = 'suppliers'
@@ -15,30 +16,30 @@ class SupplierListView(ListView):
 
         if name:
             queryset = queryset.filter(name__icontains=name)
-        
+
         return queryset
 
 
-class SupplierCreateView(CreateView):
+class SupplierCreateView(LoginRequiredMixin, CreateView):
     models = models.Supplier
     template_name = 'supplier_create.html'
     form_class = forms.SupplierForm
     success_url = reverse_lazy('supplier_list')
 
 
-class SupplierDetailView(DetailView):
+class SupplierDetailView(LoginRequiredMixin, DetailView):
     model = models.Supplier
     template_name = 'supplier_detail.html'
 
 
-class SupplierUpdateView(UpdateView):
+class SupplierUpdateView(LoginRequiredMixin, UpdateView):
     model = models.Supplier
     template_name = 'supplier_update.html'
     form_class = forms.SupplierForm
     success_url = reverse_lazy('supplier_list')
 
 
-class SupplierDeleteView(DeleteView):
+class SupplierDeleteView(LoginRequiredMixin, DeleteView):
     model = models.Supplier
     template_name = 'supplier_delete.html'
     success_url = reverse_lazy('supplier_list')
