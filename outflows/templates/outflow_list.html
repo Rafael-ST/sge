@@ -4,7 +4,9 @@
 {% endblock %}
 {% block content %}
 
-    {% include 'components/_sales_metrics.html' %}
+    {% if perms.outflows.view_outflow %}
+        {% include 'components/_sales_metrics.html' %}
+    {% endif %}{% include 'components/_sales_metrics.html' %}
 
     <div class="mb-4"></div>
 
