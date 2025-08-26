@@ -2,10 +2,10 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.views.generic import ListView, CreateView, DetailView
-from . import models, forms
+from . import models, forms, serializers
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-
+from rest_framework import generics
 
 
 class InflowListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -21,7 +21,7 @@ class InflowListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
         if product:
             queryset = queryset.filter(product__title__icontains=product)
-        
+
         return queryset
 
 
@@ -37,3 +37,13 @@ class InflowDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     model = models.Inflow
     template_name = 'inflow_detail.html'
     permission_required = 'inflows.view_inflow'
+
+
+class InflowCreateListAPIView(generics.ListCreateAPIView):
+    queryset = models.Inflow.objects.all()
+    serializer_class = serializers.InflowSerializer
+
+
+class InflowRetrieveAPIView(generics.RetrieveAPIView):
+    queryset = models.Inflow.objects.all()
+    serializer_class = serializers.InflowSerializer
